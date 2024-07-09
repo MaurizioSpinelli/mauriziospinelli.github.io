@@ -1,12 +1,5 @@
 # Use a imagem oficial do Elasticsearch
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.10.1
-
-# Instale Tini usando apk
-USER root
-RUN apk add --no-cache tini
-
-# Use o tini como entrypoint para gerenciar sinalização
-ENTRYPOINT ["/sbin/tini", "--"]
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.16.1
 
 # Exponha a porta 9200 para o Elasticsearch
 EXPOSE 9200
