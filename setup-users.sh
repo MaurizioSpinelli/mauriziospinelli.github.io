@@ -10,9 +10,8 @@ done
 echo "Configurando senhas..."
 /usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto --batch
 
-# Exemplo de como definir uma senha específica para o usuário 'elastic'
-echo "Criando usuário 'elastic' com senha 'pesquisapdf'"
-curl -XPOST -u elastic:pesquisapdf 'http://localhost:9200/_security/user/elastic/_password' -H "Content-Type: application/json" -d'
-{
+# Definir uma senha específica para o usuário 'elastic'
+echo "Definindo senha para o usuário 'elastic'"
+curl -XPOST -u elastic:password -H "Content-Type: application/json" -d '{
   "password" : "pesquisapdf"
-}'
+}' "http://localhost:9200/_security/user/elastic/_password"
