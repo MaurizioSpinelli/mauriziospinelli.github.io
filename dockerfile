@@ -1,9 +1,5 @@
 FROM docker.elastic.co/elasticsearch/elasticsearch:7.16.2
 
-# Instalar a ferramenta expect
-USER root
-RUN apt-get update && apt-get install -y expect
-
 # Copiar o arquivo de configuração para o contêiner
 COPY elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
 
@@ -11,7 +7,7 @@ COPY elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
 COPY setup-users.sh /usr/share/elasticsearch/setup-users.sh
 
 # Definir permissões adequadas para o arquivo de configuração e script de inicialização
-RUN chown elasticsearch:elasticsearch /usr/share/elasticsearch/config/elasticsearch.yml
+USER root
 RUN chmod +x /usr/share/elasticsearch/setup-users.sh
 USER elasticsearch
 
