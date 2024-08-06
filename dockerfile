@@ -1,21 +1,22 @@
-# Use a imagem oficial do Elasticsearch
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.16.1
-
-# Exponha a porta 9200 para o Elasticsearch
-EXPOSE 9200
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.16.2
 
 # Copiar o arquivo de configuração para o contêiner
 COPY elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml
 
-# Definir permissões adequadas para o arquivo de configuração
+# Copiar o script de inicialização para o contêiner
+COPY setup-users.sh /usr/share/elasticsearch/setup-users.sh
+
+# Definir permissões adequadas para o arquivo de configuração e script de inicialização
 USER root
 RUN chown elasticsearch:elasticsearch /usr/share/elasticsearch/config/elasticsearch.yml
+RUN chmod +x /usr/share/elasticsearch/setup-users.sh
 USER elasticsearch
 
-# Configure variáveis de ambiente necessárias
-ENV discovery.type=single-node
+# Expor a porta 9200 para requisições HTTP RESTful
+EXPOSE 9200
 
+# Configurar o Elasticsearch para ligar na interface 0.0.0.0
 ENV network.host=0.0.0.0
 
-# Comando para iniciar o Elasticsearch
-CMD ["elasticsearch"]
+# Comando para iniciar o Elasticsearch e configurar usuários
+CMD ["/bin/bash", "-c", "bin/elasticsearch & /usr/share/elasticsearch/setup-users.sh && tail -f /dev/null"]
