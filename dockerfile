@@ -15,5 +15,7 @@ USER elasticsearch
 # Configure variáveis de ambiente necessárias
 ENV discovery.type=single-node
 
+ENV network.host=0.0.0.0
+
 # Comando para iniciar o Elasticsearch
 CMD ["elasticsearch"]
