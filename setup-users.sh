@@ -8,15 +8,15 @@ done
 
 # Configurar senha para os usuários padrão e capturar a saída
 echo "Configurando senhas..."
-PASSWORD_OUTPUT=$(expect -c '
-spawn /usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto --batch
-expect "PASSWORD elastic"
-set elastic_password $expect_out(buffer)
-puts $elastic_password
-')
+PASSWORD_OUTPUT=$(/usr/share/elasticsearch/bin/elasticsearch-setup-passwords auto --batch)
 
 # Extrair a senha gerada para o usuário 'elastic'
-ELASTIC_PASSWORD=$(echo "$PASSWORD_OUTPUT" | grep -oP "(?<=PASSWORD elastic : )\S+")
+ELASTIC_PASSWORD=$(echo "$PASSWORD_OUTPUT" | grep -oP "(?<=PASSWORD elastic  : )\S+")
+
+if [ -z "$ELASTIC_PASSWORD" ]; then
+    echo "Falha ao obter a senha do usuário 'elastic'."
+    exit 1
+fi
 
 echo "Senha gerada para o usuário 'elastic': $ELASTIC_PASSWORD"
 
